@@ -1,0 +1,258 @@
+@import "@fontsource/anton/400.css";
+@import "@fontsource/geist-sans/400.css";
+@import "@fontsource/geist-sans/500.css";
+@import "@fontsource/geist-sans/600.css";
+@import "@fontsource/geist-sans/700.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: theme("colors.bone");
+  color: theme("colors.ink");
+  font-family: theme("fontFamily.sans");
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Heroic display type: condensed, uppercase, cinematic.
+   0.9 leading is right for the huge desktop sizes, but at mobile sizes the
+   lines nearly touch — so it only tightens from md up. */
+.font-display {
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+@media (min-width: 768px) {
+  .font-display {
+    line-height: 0.9;
+  }
+}
+
+/* Subtle radiant sunburst — the Sun-Man motif. Rays are amber rather than
+   bright gold; on a cream ground pale gold renders as nothing. */
+.sunburst {
+  background-image: repeating-conic-gradient(
+    from 0deg,
+    rgba(168, 118, 10, 0.13) 0deg 6deg,
+    transparent 6deg 12deg
+  );
+  -webkit-mask-image: radial-gradient(closest-side, #000 35%, transparent 78%);
+  mask-image: radial-gradient(closest-side, #000 35%, transparent 78%);
+}
+
+/* Ambient warm glows. Several directions rather than one: a single radial
+   position reused on every section made the whole page look lit from the same
+   corner. Each section picks a different origin, size and warmth so the light
+   shifts as you scroll.
+   
+   Every glow is masked to fade out before the section's top and bottom edges.
+   Without this the radial is still opaque where the section ends, and clipping
+   it there draws a hard line between sections. */
+.glow-tr,
+.glow-tl,
+.glow-bl,
+.glow-br,
+.glow-r,
+.glow-ember,
+.edge-fade {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 20%,
+    #000 80%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 20%,
+    #000 80%,
+    transparent 100%
+  );
+}
+.glow-tr {
+  background: radial-gradient(58% 58% at 74% 30%, rgba(253, 184, 19, 0.26), transparent 70%);
+}
+.glow-tl {
+  background: radial-gradient(64% 60% at 22% 26%, rgba(253, 184, 19, 0.22), transparent 72%);
+}
+.glow-bl {
+  background: radial-gradient(70% 62% at 16% 82%, rgba(253, 184, 19, 0.20), transparent 74%);
+}
+.glow-br {
+  background:
+    radial-gradient(60% 56% at 84% 78%, rgba(253, 184, 19, 0.22), transparent 72%),
+    radial-gradient(46% 44% at 12% 18%, rgba(149, 21, 21, 0.05), transparent 70%);
+}
+.glow-r {
+  background: radial-gradient(48% 74% at 96% 50%, rgba(253, 184, 19, 0.24), transparent 72%);
+}
+/* Red-leaning, for the conversion moment. */
+.glow-ember {
+  background:
+    radial-gradient(58% 60% at 30% 88%, rgba(149, 21, 21, 0.09), transparent 72%),
+    radial-gradient(52% 50% at 82% 14%, rgba(253, 184, 19, 0.18), transparent 70%);
+}
+
+/* Clearing behind the hero copy. A horizontal band rather than a blob: painted
+   in the page's own bone across only the rows the type occupies, so the figure
+   stays vivid above (head, cape) and below (legs, boots) while the display
+   copy sits on near-solid ground. */
+.hero-veil {
+  /* Tuned against measured positions: his head sits 8-24%, the proof row
+     25-27%, the headline 31-54%, and the CTA lands near 68%. So the veil stays
+     fully clear through his head, covers every row of copy, then releases so
+     his legs and boots read at full strength. */
+  background: linear-gradient(
+    to bottom,
+    rgba(252, 251, 249, 0) 23%,
+    rgba(252, 251, 249, 0.86) 28%,
+    rgba(252, 251, 249, 0.93) 42%,
+    rgba(252, 251, 249, 0.9) 58%,
+    rgba(252, 251, 249, 0.68) 70%,
+    rgba(252, 251, 249, 0) 79%
+  );
+}
+
+/* Section bands (.band-gold / .band-sun / .band-red / .band-cream) were removed
+   here: every section now shares the page's flat `bone`, so the page reads as
+   one continuous surface with no seams between sections. */
+
+/* Hairline that fades out at both ends, so dividers never read as hard lines
+   cutting across the page. */
+.rule-soft {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(223, 217, 203, 0.9) 16%,
+    rgba(223, 217, 203, 0.9) 84%,
+    transparent 100%
+  );
+}
+
+/* Two-tone brand rule under section eyebrows: red into gold. */
+.rule-brand {
+  background: linear-gradient(
+    90deg,
+    theme("colors.red") 0%,
+    theme("colors.gold") 100%
+  );
+}
+
+/* Fixed film-grain overlay — pointer-events-none, never on scroll containers.
+   Lighter than the dark build; grain reads far more strongly on cream. */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.022;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Hero entrance. Deliberately CSS rather than JS: the hero copy must never
+   depend on hydration to become visible. Stagger with --d. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise {
+  animation: rise 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--d, 0s);
+}
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+  }
+}
+
+/* A page header already supplies the breathing room above the first section,
+   so the section that follows collapses its own top padding. Without this the
+   two paddings stack and leave ~200px between the intro copy and the content. */
+.page-header + section {
+  padding-top: 1.5rem;
+}
+@media (min-width: 768px) {
+  .page-header + section {
+    padding-top: 2rem;
+  }
+}
+
+/* Scroll reveals. The hidden state is scoped to `.js`, a class an inline
+   script adds at the top of <body>. If scripting is unavailable, blocked, or
+   hydration fails, the class is never added and the content simply shows —
+   nothing on this site may depend on JS to become visible. */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.js .reveal.is-in {
+  animation: rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--d, 0s);
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal,
+  .js .reveal.is-in {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
+
+/* Kinetic marquee band. */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 34s linear infinite;
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin-slow {
+  animation: spin-slow 120s linear infinite;
+}
+
+/* Thin red rule used on section eyebrows. */
+.hairline-red {
+  background: linear-gradient(90deg, theme("colors.red"), transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-spin-slow {
+    animation: none;
+  }
+}
+
+::selection {
+  background: theme("colors.red");
+  color: theme("colors.bone");
+}
