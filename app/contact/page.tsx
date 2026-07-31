@@ -3,6 +3,7 @@ import { OG_IMAGE } from "@/lib/seo";
 import { PageHeader } from "@/components/PageHeader";
 import { ContactForm } from "@/components/ContactForm";
 import { SITE, SOCIALS } from "@/lib/data";
+import { Sunman } from "@/components/Sunman";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -23,7 +24,7 @@ export default function ContactPage() {
       <PageHeader
         eyebrow="Get In Touch"
         title="Contact"
-        intro="Licensing, press, partnerships, or just saying hello — reach out to the team behind Sun-Man."
+        intro={<>Licensing, press, partnerships, or just saying hello — reach out to the team behind <Sunman />.</>}
       />
       <section className="bg-bone py-20 md:py-28">
         <div className="mx-auto grid max-w-site gap-10 px-7 md:grid-cols-[1.2fr_0.8fr] md:px-8">

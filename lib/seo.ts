@@ -4,7 +4,22 @@
 
 import { SOCIALS } from "./data";
 
-export const SITE_URL = "https://www.officialsunman.com";
+// Resolved per-deployment. Pointing this at the custom domain before that
+// domain serves the build breaks link previews: og:image resolves to a host
+// that isn't running this site, the scraper can't fetch it, and the platform
+// falls back to whatever image it can find.
+//
+// Order: an explicit override, then Vercel's production domain, then the
+// current deployment, then the intended final domain.
+function resolveSiteUrl() {
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL)
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return "https://www.officialsunman.com";
+}
+
+export const SITE_URL = resolveSiteUrl();
 
 export const SITE_NAME = "Sun-Man";
 

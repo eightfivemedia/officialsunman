@@ -3,6 +3,7 @@ import { OG_IMAGE } from "@/lib/seo";
 import { PageHeader } from "@/components/PageHeader";
 import { Series } from "@/components/Series";
 import { Newsletter } from "@/components/Newsletter";
+import { Sunman } from "@/components/Sunman";
 
 export const metadata: Metadata = {
   title: "The Legend of Sun-Man",
@@ -23,7 +24,7 @@ export default function SeriesPage() {
     <main>
       <PageHeader
         eyebrow="Animated Series"
-        title="The Legend of Sun-Man"
+        title={<>The Legend of <Sunman /></>}
         intro="The untold story of Prince Sunni Ali of Ancient Kemet — the animated origin story, streaming now."
       />
       <Series showHeading={false} />

@@ -1,6 +1,7 @@
 import { SERIES_VIDEO } from "@/lib/data";
 import { Reveal } from "./Reveal";
 import { YouTubeEmbed } from "./YouTubeEmbed";
+import { Sunman } from "./Sunman";
 
 // Home for the flagship "Legend of Sun-Man" animated origin story.
 // `showHeading` is off on /series, where the PageHeader already names it.
@@ -20,7 +21,7 @@ export function Series({ showHeading = true }: { showHeading?: boolean }) {
             </Reveal>
             <Reveal delay={0.05}>
               <h2 className="max-w-wide font-display text-4xl text-ink md:text-6xl">
-                The Legend of Sun-Man
+                The Legend of <Sunman />
               </h2>
             </Reveal>
           </>

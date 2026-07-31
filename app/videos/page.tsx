@@ -3,6 +3,7 @@ import { OG_IMAGE } from "@/lib/seo";
 import { PageHeader } from "@/components/PageHeader";
 import { VideoGrid } from "@/components/VideoGrid";
 import { YOUTUBE_CHANNEL } from "@/lib/data";
+import { Sunman } from "@/components/Sunman";
 
 export const metadata: Metadata = {
   title: "Videos",
@@ -23,7 +24,7 @@ export default function VideosPage() {
       <PageHeader
         eyebrow="Watch"
         title="Videos"
-        intro="Interviews with creator Yla Eason, unboxings, and reviews from the Sun-Man community."
+        intro={<>Interviews with creator Yla Eason, unboxings, and reviews from the <Sunman /> community.</>}
       />
 
       <section className="bg-bone py-16 md:py-24">

@@ -4,6 +4,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { GetSunMan } from "@/components/GetSunMan";
 import { Newsletter } from "@/components/Newsletter";
 import { RETAILERS } from "@/lib/data";
+import { Sunman } from "@/components/Sunman";
 
 // Built from the live retailer list so the description can't advertise a
 // stockist we've since delisted.
@@ -28,7 +29,7 @@ export default function GetPage() {
     <main>
       <PageHeader
         eyebrow="Buy Now"
-        title="Get Sun-Man"
+        title={<>Get <Sunman /></>}
         intro="Available now as part of Mattel's Masters of the Universe Origins line. Choose your retailer below."
       />
       <GetSunMan />

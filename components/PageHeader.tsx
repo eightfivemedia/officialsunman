@@ -1,11 +1,15 @@
+import type { ReactNode } from "react";
+
+// title/intro accept nodes, not just strings, so brand names can carry their
+// trademark mark.
 export function PageHeader({
   eyebrow,
   title,
   intro,
 }: {
   eyebrow: string;
-  title: string;
-  intro?: string;
+  title: ReactNode;
+  intro?: ReactNode;
 }) {
   return (
     <section className="page-header relative overflow-hidden bg-bone">

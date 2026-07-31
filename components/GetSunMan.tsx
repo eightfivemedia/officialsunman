@@ -1,6 +1,7 @@
 import { RETAILERS } from "@/lib/data";
 import { Reveal } from "./Reveal";
 import { Logo } from "./Logo";
+import { Sunman } from "./Sunman";
 
 export function GetSunMan() {
   return (
@@ -25,8 +26,8 @@ export function GetSunMan() {
         </Reveal>
         <Reveal delay={0.1}>
           <p className="mx-auto mt-5 max-w-prose text-lg leading-relaxed text-ink-muted">
-            Sun-Man is available now as part of Mattel&apos;s Masters of the
-            Universe. Pick your retailer.
+            <Sunman /> is available now as part of Mattel&apos;s Masters of
+            the Universe. Pick your retailer.
           </p>
         </Reveal>
 

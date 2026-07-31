@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { OG_IMAGE } from "@/lib/seo";
 import { PageHeader } from "@/components/PageHeader";
 import { PressGrid } from "@/components/PressGrid";
+import { Sunman } from "@/components/Sunman";
 
 export const metadata: Metadata = {
   title: "Press",
@@ -23,7 +24,7 @@ export default function PressPage() {
       <PageHeader
         eyebrow="In The Press"
         title="The world took notice"
-        intro="From The New York Times to IGN, Complex, and Gizmodo — Sun-Man's return made headlines around the world."
+        intro={<>From The New York Times to IGN, Complex, and Gizmodo — <Sunman />&apos;s return made headlines around the world.</>}
       />
       <PressGrid />
     </main>

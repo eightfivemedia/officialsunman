@@ -26,14 +26,14 @@ export type Retailer = {
 
 const ALL_RETAILERS: Retailer[] = [
   {
+    // Delisted — flip back to true when stock returns.
     name: "Mattel",
     href: "https://www.mattel.com/products/masters-of-the-universe-origins-55-in-action-figure-assortment-hdr90",
+    active: false,
   },
   {
-    // Delisted — flip back to true when stock returns.
     name: "Amazon",
     href: "https://www.amazon.com/Masters-Universe-Storytelling-10-Year-Olds-Collectors/dp/B09CLPY5PB/",
-    active: false,
   },
   {
     // Delisted — flip back to true when stock returns.

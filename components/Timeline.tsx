@@ -1,5 +1,6 @@
 import { TIMELINE } from "@/lib/data";
 import { Reveal } from "./Reveal";
+import { withTM } from "./Sunman";
 
 export function Timeline() {
   const last = TIMELINE.length - 1;
@@ -67,9 +68,9 @@ export function Timeline() {
                   )}
 
                   <Reveal delay={0.04 * i + 0.05}>
-                    <h3 className="text-xl font-semibold text-ink">{m.title}</h3>
+                    <h3 className="text-xl font-semibold text-ink">{withTM(m.title)}</h3>
                     <p className="mt-2 max-w-prose text-base leading-relaxed text-ink-muted">
-                      {m.body}
+                      {withTM(m.body)}
                     </p>
                   </Reveal>
                 </div>

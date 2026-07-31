@@ -4,6 +4,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { Legacy } from "@/components/Legacy";
 import { Timeline } from "@/components/Timeline";
 import { GetSunMan } from "@/components/GetSunMan";
+import { Sunman } from "@/components/Sunman";
 
 export const metadata: Metadata = {
   title: "About — The Story Behind the Original Black Superhero",
@@ -25,7 +26,7 @@ export default function AboutPage() {
       <PageHeader
         eyebrow="The Story"
         title="A hero, 40 years in the making"
-        intro="Before the movies, before the mainstream — Sun-Man was already here. This is how a mother's promise to her son became a cultural landmark."
+        intro={<>Before the movies, before the mainstream — <Sunman /> was already here. This is how a mother&apos;s promise to her son became a cultural landmark.</>}
       />
       <Legacy />
       <Timeline />
