@@ -72,6 +72,20 @@ export const metadata: Metadata = {
     apple: { url: "/apple-touch-icon.png", sizes: "180x180" },
   },
   manifest: "/site.webmanifest",
+  // Label iOS uses on the home screen when the site is added. Without it iOS
+  // falls back to the full <title>, which is far too long to fit. Matches the
+  // manifest's short_name so iOS and Android show the same label.
+  appleWebApp: {
+    title: "Sun-Man",
+    capable: true,
+    statusBarStyle: "default",
+  },
+  other: {
+    // Next emits the modern `mobile-web-app-capable`; Safari has historically
+    // required the apple-prefixed name for home-screen launches, and favicon
+    // validators still look for it.
+    "apple-mobile-web-app-capable": "yes",
+  },
 };
 
 // viewportFit: "cover" lets the page paint into the notch/safe area, so the
