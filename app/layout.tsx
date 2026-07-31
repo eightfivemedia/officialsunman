@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
@@ -72,6 +72,18 @@ export const metadata: Metadata = {
     apple: { url: "/apple-touch-icon.png", sizes: "180x180" },
   },
   manifest: "/site.webmanifest",
+};
+
+// viewportFit: "cover" lets the page paint into the notch/safe area, so the
+// header's backdrop can cover it instead of leaving a band. themeColor tints
+// the iOS Safari toolbar to match the page — without it Safari samples the top
+// of the document and can render a mismatched strip above the content.
+export const viewport: Viewport = {
+  themeColor: "#FCFBF9",
+  colorScheme: "light",
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({

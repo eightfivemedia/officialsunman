@@ -29,14 +29,24 @@ export function Nav() {
 
   return (
     <>
-      <header
-        className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
-          scrolled
-            ? "border-b border-line/70 bg-bone/85 backdrop-blur-xl"
-            : "border-b border-transparent bg-transparent"
-        }`}
-      >
-        <nav className="mx-auto flex max-w-site items-center justify-between px-5 py-3.5 md:px-8">
+      <header className="fixed inset-x-0 top-0 z-50 transform-gpu pt-[env(safe-area-inset-top)]">
+        {/* The bar's background lives on its own layer that extends past the
+            top edge, rather than sitting on the <header> itself.
+            iOS Safari samples the backdrop of a fixed, backdrop-filtered
+            element with a slight offset, which leaves an unpainted sliver at
+            the very top that page content shows through. Overshooting upwards
+            means there is nothing left to show through, and it also covers the
+            safe-area inset on notched devices. */}
+        <div
+          aria-hidden
+          className={`pointer-events-none absolute inset-x-0 -top-32 bottom-0 border-b transition-opacity duration-500 ${
+            scrolled
+              ? "border-line/70 bg-bone/85 opacity-100 backdrop-blur-xl"
+              : "border-transparent opacity-0"
+          }`}
+        />
+
+        <nav className="relative mx-auto flex max-w-site items-center justify-between px-5 py-3.5 md:px-8">
           <Link href="/" aria-label="Sun-Man — home" className="shrink-0">
             <Logo
               variant="wordmark"
@@ -93,7 +103,7 @@ export function Nav() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-3 bg-bone/95 backdrop-blur-2xl lg:hidden"
+            className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-3 bg-bone/95 pt-[env(safe-area-inset-top)] backdrop-blur-2xl lg:hidden"
           >
             {links.map((link, i) => (
               <motion.div
