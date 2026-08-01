@@ -12,6 +12,14 @@ export type VideoItem = {
 
 export const VIDEOS: VideoItem[] = [
   {
+    title: "Sun-Man",
+    youtubeId: "GCxwqZfCsSE",
+    channel: "Official Sun-Man",
+    channelUrl: "https://www.youtube.com/@officialsun-man7338",
+    duration: "",
+    thumb: "/img/videos/GCxwqZfCsSE.webp",
+  },
+  {
     title: "A Relook at The Masters of the Universe Origins Executive Figure of SUN MAN",
     youtubeId: "2gSBI8qe99Q",
     channel: "Mattel Origins Collector",

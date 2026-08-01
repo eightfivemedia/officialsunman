@@ -119,15 +119,27 @@ def do_press():
         f.write("];\n")
     print(f"  -> lib/press.ts: {len(items)} articles")
 
+# Videos that aren't in the Webflow export. Listed here so re-running the
+# import doesn't drop them; remove one once it appears in the CSV.
+MANUAL_VIDEOS = [
+    {"id": "GCxwqZfCsSE", "title": "Sun-Man", "channel": "Official Sun-Man",
+     "channel_url": "https://www.youtube.com/@officialsun-man7338", "duration": ""},
+]
+
 # ---------------------------------------------------------------- videos
 def do_videos():
     os.makedirs("public/img/videos", exist_ok=True)
-    rows = list(csv.DictReader(open(VIDEO_CSV, encoding="utf-8-sig")))
-    items = []
+    rows = [
+        {"Video Title": m["title"], "Video ID": m["id"], "Channel": m["channel"],
+         "Channel link": m["channel_url"], "Duration": m["duration"]}
+        for m in MANUAL_VIDEOS
+    ] + list(csv.DictReader(open(VIDEO_CSV, encoding="utf-8-sig")))
+    items, seen = [], set()
     for r in rows:
         vid = (r.get("Video ID") or "").strip()
-        if not vid:
+        if not vid or vid in seen:
             continue
+        seen.add(vid)
         out = f"public/img/videos/{vid}.webp"
         if not os.path.exists(out):
             got = False
