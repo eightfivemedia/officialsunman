@@ -7,6 +7,7 @@ import { Series } from "@/components/Series";
 import { GetSunMan } from "@/components/GetSunMan";
 import { Press } from "@/components/Press";
 import { Newsletter } from "@/components/Newsletter";
+import { GamesPromo } from "@/components/GamesPromo";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -23,8 +24,7 @@ export default function Home() {
       <GetSunMan />
       <Press limit={4} showAllLink />
       <Newsletter />
-      {/* <GamesPromo /> is built and ready but not mounted: the games stay
-          unlisted until launch. Re-enabling it is this line and its import. */}
+      <GamesPromo />
     </main>
   );
 }

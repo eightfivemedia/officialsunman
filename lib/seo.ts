@@ -34,9 +34,11 @@ export const ROUTES = [
   { path: "/get", priority: 0.9, changeFrequency: "weekly" as const },
   { path: "/gallery", priority: 0.7, changeFrequency: "monthly" as const },
   { path: "/videos", priority: 0.7, changeFrequency: "weekly" as const },
-  // /games and the two game pages are left out while they're unlisted — being
-  // in the sitemap is an invitation to index them, which is the opposite of
-  // what unlisted means. Add them back at launch.
+  { path: "/games", priority: 0.7, changeFrequency: "monthly" as const },
+  // The game pages themselves: thin around a framed game, but they're the URLs
+  // anyone sharing a game would link to, so they belong here.
+  { path: "/games/pighead-assault", priority: 0.6, changeFrequency: "yearly" as const },
+  { path: "/games/sky-patrol", priority: 0.6, changeFrequency: "yearly" as const },
   { path: "/press", priority: 0.7, changeFrequency: "monthly" as const },
   { path: "/contact", priority: 0.5, changeFrequency: "yearly" as const },
 ];

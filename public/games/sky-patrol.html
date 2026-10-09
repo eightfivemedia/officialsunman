@@ -396,7 +396,7 @@ function step(){
       beep(300, 150, 0.12, 'triangle', 0.04);
     }
     const box = { x:e.x-6, y:e.y-6, w:12, h:12 };
-    if (P.slash > 0 && hit(blade, box)){ e.dead = true; score += 5; burst(e.x, e.y, C.lime, 14); burst(e.x, e.y, C.gold, 6); beep(220, 60, 0.15, 'square', 0.05); continue; }
+    if (P.slash > 0 && hit(blade, box)){ e.dead = true; score += pts(5, 12); burst(e.x, e.y, C.lime, 14); burst(e.x, e.y, C.gold, 6); beep(220, 60, 0.15, 'square', 0.05); continue; }
     if (P.inv === 0 && hit(body, box)){
       e.dead = true; lives--; P.inv = 90; shake = 10; burst(P.x+20, P.y+12, C.white, 16); beep(160, 40, 0.3, 'sawtooth', 0.07);
       if (lives <= 0){
@@ -409,13 +409,13 @@ function step(){
 
   for (const s of suns){
     s.x -= speed;
-    if (hit(body, { x:s.x-5, y:s.y-5, w:10, h:10 })){ s.got = true; score++; burst(s.x, s.y, C.lgold, 5); beep(880, 1320, 0.08, 'square', 0.035); }
+    if (hit(body, { x:s.x-5, y:s.y-5, w:10, h:10 })){ s.got = true; score += pts(1, 5); burst(s.x, s.y, C.lgold, 5); beep(880, 1320, 0.08, 'square', 0.035); }
   }
   suns = suns.filter(s => !s.got && s.x > -12);
 
   for (const s of spits){
     s.x += s.vx; s.y += s.vy;
-    if (P.slash > 0 && hit(blade, { x:s.x, y:s.y, w:5, h:5 })){ s.gone = true; score += 1; burst(s.x, s.y, C.lime, 5); continue; }
+    if (P.slash > 0 && hit(blade, { x:s.x, y:s.y, w:5, h:5 })){ s.gone = true; score += pts(1, 2); burst(s.x, s.y, C.lime, 5); continue; }
     if (P.inv === 0 && hit(body, { x:s.x + 1, y:s.y + 1, w:3, h:3 })){
       s.gone = true; lives--; P.inv = 90; shake = 10; burst(P.x+20, P.y+12, C.white, 16); beep(160, 40, 0.3, 'sawtooth', 0.07);
       if (lives <= 0){ state = 'over'; overT = 0; if (score > best){ best = score; try { localStorage.setItem('sunman-best', String(best)); } catch(err){} } }
@@ -582,6 +582,14 @@ function needsFocus(){ return FINE && state === 'play' && document.hasFocus && !
 // Only meaningful while a round is running: the loop clears it the moment the
 // game leaves 'play', so the button can't get stuck reading RESUME on the title
 // or game-over screen.
+// Points vary per pickup and per kill, so two runs of the same length don't
+// land on the same score. Values are drawn when the points are awarded rather
+// than when the thing spawns, which keeps this to the scoring sites instead of
+// threading a value through every spawn.
+function pts(min, max, step){
+  step = step || 1;
+  return min + ((Math.random() * (Math.floor((max - min) / step) + 1)) | 0) * step;
+}
 let userPaused = false;
 function setPaused(v){
   userPaused = v;

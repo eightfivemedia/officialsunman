@@ -106,7 +106,7 @@ html,body{margin:0}
 <div class="cab">
   <div class="bar"><a class="back" href="/games/pighead-assault" hidden>BACK</a><span>SUN-MAN<sup class="tm">TM</sup> · PIG-HEAD ASSAULT</span><button id="pause" type="button" aria-pressed="false">PAUSE</button><button id="mute" type="button" aria-pressed="false">SOUND ON</button></div>
 <script>if(window.self===window.top){var b=document.querySelector(".bar .back");if(b)b.hidden=false;}</script>
-  <p class="hint"><span class="arrows">▲▼◀▶</span> to move. Three slashes in a row make a combo.<br>Collect suns for blasts. Ankhs heal you and make you faster and stronger for a while.<span class="keys"><br>Keyboard: arrows or WASD to move · Z or Space to jump · X to slash · C for sun blast</span></p>
+  <p class="hint"><span class="arrows">▲▼◀▶</span> to move. Three slashes in a row make a combo.<br>Suns fire blasts — Pig-Head blocks every one, so spend them on his henchpigs.<br>Ankhs heal you and make you faster and stronger for a while.<span class="keys"><br>Keyboard: arrows or WASD to move · Z or Space to jump · X to slash · C for sun blast</span></p>
   <div class="play">
   <div class="screen" id="screen">
     <canvas id="game" aria-label="Sun-Man Pig-Head Assault game"></canvas>
@@ -615,12 +615,12 @@ function hurtEnemy(e, dmg, kd, dir, how){
   burst(e.x, e.z, e.h + 16, C.lgold, 6); burst(e.x, e.z, e.h + 16, C.lime, 5);
   beep(kd ? 140 : 220, 60, 0.12, 'square', 0.05);
   if (e.kind === 'boss'){
-    if (e.hp <= 0){ e.hp = 0; e.state = 'dead'; e.t = 100; shake = 20; score += STATS.boss.score; popup('+' + STATS.boss.score, e.x - camX - 10, e.z - 70); }
+    if (e.hp <= 0){ e.hp = 0; e.state = 'dead'; e.t = 100; shake = 20; const bp = kpts(STATS.boss.score); score += bp; popup('+' + bp, e.x - camX - 10, e.z - 70); }
     else if (e.state === 'walk' || e.state === 'cool' || e.state === 'wind'){ e.state = 'hurt'; e.t = kd ? 18 : 8; e.vx = dir * (kd ? 1.5 : 0.6); }
     return true;
   }
   if (e.kind === 'flyer'){
-    if (e.hp <= 0){ e.state = 'dead'; e.vx = dir*1.5; score += STATS.flyer.score; popup('+' + STATS.flyer.score, e.x - camX - 8, e.z - e.h - 20); }
+    if (e.hp <= 0){ e.state = 'dead'; e.vx = dir*1.5; const fp = kpts(STATS.flyer.score); score += fp; popup('+' + fp, e.x - camX - 8, e.z - e.h - 20); }
     else { e.state = 'hurt'; e.t = 14; e.vx = dir*2; }
     return true;
   }
@@ -644,7 +644,7 @@ function groundAI(e){
     e.x += e.vx; e.vx *= 0.92;
     if (e.h > 0){ e.h += e.vh; e.vh -= 0.25; if (e.h <= 0){ e.h = 0; e.vh = 0; e.vx *= 0.4; burst(e.x, e.z, 0, C.sandL, 6); shake = Math.max(shake, 3); } }
     else if (--e.t <= 0){
-      if (e.hp <= 0){ e.state = 'dead'; e.t = 30; score += s.score; popup('+' + s.score, e.x - camX - 10, e.z - 40); drop(e); }
+      if (e.hp <= 0){ e.state = 'dead'; e.t = 30; const ep = kpts(s.score); score += ep; popup('+' + ep, e.x - camX - 10, e.z - 40); drop(e); }
       else { e.state = 'walk'; e.cd = 30; }
     }
     return;
@@ -849,9 +849,9 @@ function step(){
     if (P.state === 'idle' && P.h < 6 && Math.abs(k.x - P.x) < 13 && Math.abs(k.z - P.z) < 9){
       if (k.type === 'sun' && P.suns >= 5) continue;
       k.got = true;
-      if (k.type === 'sun'){ P.suns = Math.min(5, P.suns + 1); score += 50; popup('SUN +1', k.x - camX - 12, k.z - 40, C.lgold); beep(880, 1320, 0.08, 'square', 0.035); }
+      if (k.type === 'sun'){ P.suns = Math.min(5, P.suns + 1); score += pts(30, 80, 10); popup('SUN +1', k.x - camX - 12, k.z - 40, C.lgold); beep(880, 1320, 0.08, 'square', 0.035); }
       else {
-        P.power = POWER_TIME; P.hp = Math.min(P.max, P.hp + 4); score += 200;
+        P.power = POWER_TIME; P.hp = Math.min(P.max, P.hp + 4); score += pts(150, 300, 25);
         popup('SUN POWER!', k.x - camX - 28, k.z - 64, C.gold); shake = 6;
         burst(P.x, P.z, 30, C.gold, 24, 5);
         beep(440, 1760, 0.5, 'triangle', 0.06); setTimeout(() => beep(660, 1980, 0.4, 'square', 0.03), 120);
@@ -1128,6 +1128,16 @@ function needsFocus(){ return FINE && state === 'play' && document.hasFocus && !
 // Only meaningful while a round is running: the loop clears it the moment the
 // game leaves 'play', so the button can't get stuck reading RESUME on the title
 // or game-over screen.
+// Points vary per pickup and per kill, so two runs of the same length don't
+// land on the same score. Values are drawn when the points are awarded rather
+// than when the thing spawns, which keeps this to the scoring sites instead of
+// threading a value through every spawn.
+// A kill's value, scattered +/-30% around the type's base and rounded to tens.
+function kpts(base){ return pts(Math.round(base * 0.7 / 10) * 10, Math.round(base * 1.3 / 10) * 10, 10); }
+function pts(min, max, step){
+  step = step || 1;
+  return min + ((Math.random() * (Math.floor((max - min) / step) + 1)) | 0) * step;
+}
 let userPaused = false;
 function setPaused(v){
   userPaused = v;
