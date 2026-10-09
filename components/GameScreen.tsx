@@ -1,4 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
+import { GameFrame } from "./GameFrame";
 import { GAMES, type Game } from "@/lib/games";
 import { Sunman } from "./Sunman";
 
@@ -38,42 +40,52 @@ export function GameScreen({ game }: { game: Game }) {
             {game.description}
           </p>
 
-          <div
-            className="mt-8 overflow-hidden rounded-2xl border border-line/70 shadow-cinematic md:mt-10"
-            // The game's own background, so the rounded corners and any
-            // letterboxing read as part of the cabinet rather than a gap.
-            style={{ backgroundColor: game.themeColor }}
-          >
-            {/* Framed rather than inlined: each build in /public/games is a
-                complete document with its own head, fonts and scripts, and its
-                cabinet lays itself out from whatever box it's handed.
-
-                It needs real height to do that — a 16:9 box would crush the
-                phone layout, which stacks the controller under the screen. svh
-                rather than vh so a mobile toolbar sliding in and out doesn't
-                resize the game mid-play. */}
-            <iframe
-              src={game.file}
-              title={`Sun-Man: ${game.title}`}
-              allow="autoplay; fullscreen"
-              style={{ height: "clamp(460px, 78svh, 780px)" }}
-              className="block w-full border-0"
-            />
-          </div>
-
-          {/* Phones get far more out of this than the frame above: the cabinet
-              keeps its fixed-size controller and hands every pixel it gains
-              straight to the canvas. A plain <a>, not a Link — the target is
-              the game's own document, not a route in this app. */}
+          {/* Phones: a poster that launches the game, and no frame at all.
+              A cabinet squeezed into a scrolling page on a phone renders its
+              canvas below 1:1, where the pixel art resamples and softens. */}
           <a
             href={`/games/${game.slug}/play`}
-            className="group mt-5 flex w-full items-center justify-center gap-2.5 rounded-xl bg-ink px-6 py-4 font-display text-xl tracking-wide text-bone transition-all duration-300 hover:bg-red active:scale-[0.99] sm:inline-flex sm:w-auto"
+            className="group relative mt-8 block overflow-hidden rounded-2xl border border-line/70 shadow-cinematic lg:hidden"
           >
-            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden className="translate-x-[1px]">
-              <path d="M4 3v10l9-5-9-5Z" fill="currentColor" />
-            </svg>
-            Play fullscreen
+            <span className="relative block aspect-video bg-cream">
+              <Image
+                src={game.image}
+                alt=""
+                fill
+                sizes="100vw"
+                className="object-cover"
+                priority
+              />
+              <span className="absolute inset-0 bg-ink/35" />
+            </span>
+
+            <span className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-red text-bone shadow-red-glow transition-transform duration-300 group-active:scale-95">
+                <svg viewBox="0 0 16 16" width="22" height="22" aria-hidden className="translate-x-[2px]">
+                  <path d="M4 3v10l9-5-9-5Z" fill="currentColor" />
+                </svg>
+              </span>
+              <span className="font-display text-2xl tracking-wide text-bone drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
+                Play fullscreen
+              </span>
+            </span>
           </a>
+
+          {/* Wide screens: play it right here. The canvas reaches a crisp 3x in
+              the frame, so there is nothing to gain by sending them away. */}
+          <div className="mt-8 hidden lg:block">
+            <GameFrame game={game} />
+
+            <a
+              href={`/games/${game.slug}/play`}
+              className="group mt-5 inline-flex items-center justify-center gap-2.5 rounded-xl bg-ink px-6 py-4 font-display text-xl tracking-wide text-bone transition-all duration-300 hover:bg-red active:scale-[0.99]"
+            >
+              <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden className="translate-x-[1px]">
+                <path d="M4 3v10l9-5-9-5Z" fill="currentColor" />
+              </svg>
+              Play fullscreen
+            </a>
+          </div>
 
           <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
             <Link

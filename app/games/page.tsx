@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
+import { PlayLink } from "@/components/PlayLink";
 import { OG_IMAGE } from "@/lib/seo";
 import { GAMES } from "@/lib/games";
 import { PageHeader } from "@/components/PageHeader";
@@ -37,8 +37,9 @@ export default function GamesPage() {
           <div className="grid gap-6 md:grid-cols-2">
             {GAMES.map((game, i) => (
               <Reveal key={game.slug} delay={0.05 * i} className="h-full">
-                <Link
-                  href={`/games/${game.slug}`}
+                <PlayLink
+                  pageHref={`/games/${game.slug}`}
+                  playHref={`/games/${game.slug}/play`}
                   className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line/70 bg-bone/60 shadow-cinematic-sm transition-all duration-300 hover:-translate-y-1 hover:border-gold/60 hover:shadow-cinematic"
                 >
                   <div className="relative aspect-video overflow-hidden bg-cream">
@@ -92,7 +93,7 @@ export default function GamesPage() {
                       </span>
                     </span>
                   </div>
-                </Link>
+                </PlayLink>
               </Reveal>
             ))}
           </div>
