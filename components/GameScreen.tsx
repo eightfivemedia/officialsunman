@@ -29,7 +29,7 @@ export function GameScreen({ game }: { game: Game }) {
               href="/games"
               className="text-[11px] font-semibold uppercase tracking-[0.28em] text-red transition-colors duration-300 hover:text-ink"
             >
-              Games
+              Demo Games
             </Link>
           </div>
 
@@ -92,7 +92,7 @@ export function GameScreen({ game }: { game: Game }) {
               href="/games"
               className="font-semibold text-ink-muted transition-colors duration-300 hover:text-red"
             >
-              &larr; All games
+              &larr; All demos
             </Link>
 
             {other && (

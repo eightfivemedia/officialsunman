@@ -8,14 +8,14 @@ import { Reveal } from "@/components/Reveal";
 import { Sunman } from "@/components/Sunman";
 
 const description =
-  "Play free Sun-Man arcade games in your browser — Pig-Head Assault and Sky Patrol.";
+  "Play the free Sun-Man demo games in your browser — Pig-Head Assault and Sky Patrol.";
 
 export const metadata: Metadata = {
-  title: "Games",
+  title: "Demo Games",
   description,
   alternates: { canonical: "/games" },
   openGraph: {
-    title: "Games",
+    title: "Demo Games",
     description,
     url: "/games",
     type: "website",
@@ -28,8 +28,8 @@ export default function GamesPage() {
     <main>
       <PageHeader
         eyebrow="Play"
-        title="Games"
-        intro={<>Take <Sunman /> into battle yourself. Both games run right in your browser — on a computer or a phone, no download.</>}
+        title="Demo Games"
+        intro={<>Take <Sunman /> into battle yourself. Both demos run right in your browser — on a computer or a phone, no download.</>}
       />
 
       <section className="bg-bone py-16 md:py-24">
@@ -60,7 +60,7 @@ export default function GamesPage() {
 
                     <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
                       <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-gold">
-                        Arcade
+                        Demo
                       </span>
                       <span className="mt-1.5 block font-display text-4xl text-bone md:text-5xl">
                         {game.title}

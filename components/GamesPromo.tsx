@@ -159,7 +159,7 @@ export function GamesPromo() {
                 id="games-promo-title"
                 className="max-w-[16ch] font-display text-3xl text-ink sm:text-4xl"
               >
-                Play the <Sunman /> games
+                Play the <Sunman /> demo games
               </h2>
               <p className="mt-3 text-base leading-relaxed text-ink-muted">
                 Two free demos, right in your browser — on a computer or a phone,

@@ -95,7 +95,7 @@ html,body{margin:0}
 <div class="cab">
   <div class="bar"><a class="back" href="/games/sky-patrol" hidden>BACK</a><span>SUN-MAN<sup class="tm">TM</sup> · SKY PATROL</span><button id="pause" type="button" aria-pressed="false">PAUSE</button><button id="mute" type="button" aria-pressed="false">SOUND ON</button></div>
 <script>if(window.self===window.top){var b=document.querySelector(".bar .back");if(b)b.hidden=false;}</script>
-  <p class="hint">Hold FLY to rise, let go to fall. Slash the Pig-Heads and the spit they fire.<br>Collect suns for points. Ankhs restore your lives to full.<span class="keys"><br>Keyboard: hold Space to fly · X to slash</span></p>
+  <p class="hint">Hold FLY to rise, let go to fall. Climbing scores — but not pinned to the top or bottom.<br>Slash the Pig-Heads and the spit they fire. Collect suns for points.<br>Ankhs restore your lives to full.<span class="keys"><br>Keyboard: hold Space to fly · X to slash</span></p>
   <div class="play">
     <div class="screen" id="screen">
       <canvas id="game" aria-label="Sun-Man Sky Patrol game"></canvas>
@@ -261,13 +261,13 @@ let bgX = 0;
 let P = null, enemies = null, suns = null, ankhs = null, spits = null;
 let state = 'title', frame = 0, T = 0, overT = 0, speed = 1.4, shake = 0;
 const MAX_LIVES = 3;
-let parts, score, lives, spawnE, spawnS, spawnA, eCount;
+let parts, score, lives, spawnE, spawnS, spawnA, eCount, flyT;
 const input = { fly:false };
 
 function reset(){
   P = { x:24, y:H*0.4, vy:0, slash:0, slashCd:0, inv:60 };
   enemies = []; suns = []; parts = []; spits = []; ankhs = [];
-  score = 0; lives = MAX_LIVES; T = 0; speed = 1.4; spawnE = 70; spawnS = 30; spawnA = 900; eCount = 0;
+  score = 0; lives = MAX_LIVES; T = 0; speed = 1.4; spawnE = 70; spawnS = 30; spawnA = 900; eCount = 0; flyT = 0;
 }
 setMode();
 reset();
@@ -366,6 +366,13 @@ function step(){
   P.y += P.vy;
   if (P.y < 4){ P.y = 4; P.vy = 0; }
   if (P.y > H - 50){ P.y = H - 50; P.vy = 0; }
+  // Flying pays by the distance you hold it, but only in open air: pinned to
+  // the ceiling or sitting on the floor, FLY costs nothing and earns nothing.
+  // The ceiling is what keeps this in check — a climb only lasts a second or
+  // two before you have to let go and fall back down for free.
+  if (input.fly && P.y > 4 && P.y < H - 50){
+    if (++flyT % 10 === 0) score += 1;
+  } else flyT = 0;
   if (P.slash > 0) P.slash--;
   if (P.slashCd > 0) P.slashCd--;
   if (P.inv > 0) P.inv--;
