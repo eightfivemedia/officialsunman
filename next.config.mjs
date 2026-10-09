@@ -19,6 +19,25 @@ const nextConfig = {
     return config;
   },
 
+  // "Play fullscreen" serves each game's own document at a clean URL. The builds
+  // in public/games are already complete standalone pages, so there is nothing
+  // to wrap them in — no Next page and no iframe. That matters for more than
+  // tidiness: a framed document never receives safe-area insets and its own
+  // viewport meta is ignored, so only at the top level does the controller
+  // clear the home bar and the game's user-scalable=no actually take effect.
+  //
+  // Listed per game rather than as /games/:slug/play, so an unknown slug 404s
+  // instead of rewriting to a file that isn't there.
+  async rewrites() {
+    return [
+      {
+        source: "/games/pighead-assault/play",
+        destination: "/games/pighead-assault.html",
+      },
+      { source: "/games/sky-patrol/play", destination: "/games/sky-patrol.html" },
+    ];
+  },
+
   // The page moved from /series to /legend; keep old links and any indexed
   // URLs working rather than 404ing them.
   async redirects() {

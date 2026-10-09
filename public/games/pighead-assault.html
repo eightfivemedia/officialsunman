@@ -33,6 +33,18 @@ body{
 .bar{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:8px;letter-spacing:.06em}
 .bar span{color:var(--gold)}
 .bar button{font-family:var(--pixel);font-size:8px;background:transparent;color:var(--ink);border:2px solid var(--ink);padding:6px 8px;cursor:pointer}
+/* Returns to the game's page on the site. Only ever visible when the game is
+   the top-level document — inside the frame on that page it would point at
+   the page you are already on. */
+.bar .back{font-family:var(--pixel);font-size:8px;color:var(--ink);text-decoration:none;border:2px solid var(--ink);padding:6px 8px;white-space:nowrap;flex:none}
+.bar .back:hover,.bar .back:focus-visible{color:var(--gold);border-color:var(--gold)}
+.bar button:disabled{opacity:.35;cursor:default}
+/* Four items don't fit a phone's bar. The title is what gives way: the page
+   above already names the game, and the controls must stay reachable. */
+@media (max-width:460px){ .bar > span{display:none} }
+/* With three items in the bar the title is the one that must give way on a
+   narrow phone, rather than pushing the sound toggle off the edge. */
+.bar > span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .play{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px}
 .screen{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;position:relative}
 [hidden]{display:none!important}
@@ -92,7 +104,8 @@ html,body{margin:0}
 </head>
 <body>
 <div class="cab">
-  <div class="bar"><span>SUN-MAN<sup class="tm">TM</sup> · PIG-HEAD ASSAULT</span><button id="mute" type="button" aria-pressed="false">SOUND ON</button></div>
+  <div class="bar"><a class="back" href="/games/pighead-assault" hidden>BACK</a><span>SUN-MAN<sup class="tm">TM</sup> · PIG-HEAD ASSAULT</span><button id="pause" type="button" aria-pressed="false">PAUSE</button><button id="mute" type="button" aria-pressed="false">SOUND ON</button></div>
+<script>if(window.self===window.top){var b=document.querySelector(".bar .back");if(b)b.hidden=false;}</script>
   <p class="hint"><span class="arrows">▲▼◀▶</span> to move. Three slashes in a row make a combo. Jump and slash to beat Pig-Head's shield.<br>Collect suns for blasts. Ankhs heal you and make you faster and stronger for a while.<span class="keys"><br>Keyboard: arrows or WASD to move · Z or Space to jump · X to slash · C for sun blast</span></p>
   <div class="play">
   <div class="screen" id="screen">
@@ -346,6 +359,9 @@ function beep(f1, f2, dur, type='square', vol=0.05){
 }
 const muteBtn = document.getElementById('mute');
 muteBtn.addEventListener('click', () => { muted = !muted; muteBtn.textContent = muted ? 'SOUND OFF' : 'SOUND ON'; muteBtn.setAttribute('aria-pressed', String(muted)); });
+
+const pauseBtn = document.getElementById('pause');
+pauseBtn.addEventListener('click', () => { if (state === 'play') setPaused(!userPaused); });
 
 /* ================= stage layout ================= */
 const ZONES = [
@@ -1090,6 +1106,7 @@ for (const el of [document.querySelector('.pad'), cv]) el.addEventListener('touc
 
 const DIR = { ArrowLeft:'left', KeyA:'left', ArrowRight:'right', KeyD:'right', ArrowUp:'up', KeyW:'up', ArrowDown:'down', KeyS:'down' };
 addEventListener('keydown', e => {
+  if (e.code === 'KeyP'){ e.preventDefault(); if (state === 'play') setPaused(!userPaused); return; }
   const c = e.code;
   if (DIR[c] || c === 'Space') e.preventDefault();
   if (e.repeat) return;
@@ -1107,11 +1124,24 @@ addEventListener('blur', () => { keys.left = keys.right = keys.up = keys.down = 
 const FINE = !!(window.matchMedia && matchMedia('(hover:hover) and (pointer:fine)').matches);
 function grabFocus(){ try { window.focus(); } catch(e){} }
 function needsFocus(){ return FINE && state === 'play' && document.hasFocus && !document.hasFocus(); }
-function drawFocusMsg(){
+// Manual pause, layered on the existing auto-pause for a lost window focus.
+// Only meaningful while a round is running: the loop clears it the moment the
+// game leaves 'play', so the button can't get stuck reading RESUME on the title
+// or game-over screen.
+let userPaused = false;
+function setPaused(v){
+  userPaused = v;
+  // Looked up per call rather than closed over, so this is safe to call from
+  // anywhere in setup regardless of when the button's const is initialised.
+  const b = document.getElementById('pause');
+  if (b){ b.textContent = v ? 'RESUME' : 'PAUSE'; b.setAttribute('aria-pressed', String(v)); }
+}
+function drawFocusMsg(manual){
   ctx.save();
   ctx.fillStyle = 'rgba(6,10,40,0.6)'; ctx.fillRect(0, 0, W, H);
   ctx.fillStyle = '#0a0f38'; ctx.fillRect(0, H/2 - 26, W, 50);
   txt('PAUSED', W/2, H/2 - 18, 10, '#f7c21a', 'center', '#160a05');
+  if (manual){ txt('PRESS RESUME', W/2, H/2 + 2, 7, '#ffffff', 'center'); ctx.restore(); return; }
   txt('CLICK THE GAME', W/2, H/2 + 2, 7, '#ffffff', 'center');
   txt('TO USE THE KEYBOARD', W/2, H/2 + 13, 6, '#ffffff', 'center');
   ctx.restore();
@@ -1122,10 +1152,13 @@ function loop(t){
   requestAnimationFrame(loop);
   if (!last) last = t;
   acc += Math.min(100, t - last); last = t;
-  const paused = needsFocus();
+  if (userPaused && state !== 'play') setPaused(false);
+  if (pauseBtn && pauseBtn.disabled !== (state !== 'play')) pauseBtn.disabled = state !== 'play';
+  const focusLost = needsFocus();
+  const paused = focusLost || userPaused;
   if (paused){ acc = 0; frame++; } else while (acc >= STEP){ step(); acc -= STEP; }
   draw();
-  if (paused) drawFocusMsg();
+  if (paused) drawFocusMsg(!focusLost);
 }
 (document.fonts && document.fonts.load ? document.fonts.load('8px "Press Start 2P"').catch(()=>{}) : Promise.resolve())
   .finally(() => requestAnimationFrame(loop));

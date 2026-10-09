@@ -61,6 +61,20 @@ export function GameScreen({ game }: { game: Game }) {
             />
           </div>
 
+          {/* Phones get far more out of this than the frame above: the cabinet
+              keeps its fixed-size controller and hands every pixel it gains
+              straight to the canvas. A plain <a>, not a Link — the target is
+              the game's own document, not a route in this app. */}
+          <a
+            href={`/games/${game.slug}/play`}
+            className="group mt-5 flex w-full items-center justify-center gap-2.5 rounded-xl bg-ink px-6 py-4 font-display text-xl tracking-wide text-bone transition-all duration-300 hover:bg-red active:scale-[0.99] sm:inline-flex sm:w-auto"
+          >
+            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden className="translate-x-[1px]">
+              <path d="M4 3v10l9-5-9-5Z" fill="currentColor" />
+            </svg>
+            Play fullscreen
+          </a>
+
           <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
             <Link
               href="/games"
