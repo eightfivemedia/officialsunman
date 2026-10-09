@@ -13,6 +13,9 @@ export const NAV_LINKS = [
   { label: "Gallery", href: "/gallery" },
   { label: "The Legend", href: "/legend" },
   { label: "Videos", href: "/videos" },
+  // Games is deliberately absent. The pages under /games are live and work for
+  // anyone with a direct link, but stay unlisted until launch. Nav and Footer
+  // both read this list, so adding the entry back surfaces it in both.
   { label: "Press", href: "/press" },
   { label: "Contact", href: "/contact" },
 ];

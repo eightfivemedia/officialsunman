@@ -34,6 +34,9 @@ export const ROUTES = [
   { path: "/get", priority: 0.9, changeFrequency: "weekly" as const },
   { path: "/gallery", priority: 0.7, changeFrequency: "monthly" as const },
   { path: "/videos", priority: 0.7, changeFrequency: "weekly" as const },
+  // /games and the two game pages are left out while they're unlisted — being
+  // in the sitemap is an invitation to index them, which is the opposite of
+  // what unlisted means. Add them back at launch.
   { path: "/press", priority: 0.7, changeFrequency: "monthly" as const },
   { path: "/contact", priority: 0.5, changeFrequency: "yearly" as const },
 ];

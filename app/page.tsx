@@ -23,6 +23,8 @@ export default function Home() {
       <GetSunMan />
       <Press limit={4} showAllLink />
       <Newsletter />
+      {/* <GamesPromo /> is built and ready but not mounted: the games stay
+          unlisted until launch. Re-enabling it is this line and its import. */}
     </main>
   );
 }
