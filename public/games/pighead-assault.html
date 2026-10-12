@@ -253,8 +253,9 @@ function pigFace(p, ox, oy, hood, hoodL, horns){
   p(ox+6,oy+12,4,1,C.mouth);
   p(ox+3,oy+11,2,2,C.tusk); p(ox+11,oy+11,2,2,C.tusk); p(ox+2,oy+13,1,2,C.tusk); p(ox+13,oy+13,1,2,C.tusk);
 }
-/* Pink pig henchman head: pig ears, pink snout, beady eyes, cap or iron helmet */
-const PK = { skin:'#f2a0b8', shade:'#cf6f90', snout:'#e9879f', nose:'#8a3050', leather:'#6a3a1e', leatherD:'#4a2410', iron:'#6a7080', ironL:'#9aa0b0', ironD:'#3e4250' };
+/* Henchpig head: pig ears, green snout, beady eyes, cap or iron helmet. The hide
+   is Pig-Head's own lime, pulled from C so every pig stays on one green. */
+const PK = { skin:C.lime, shade:C.limeD, snout:C.snout, nose:C.red, leather:'#6a3a1e', leatherD:'#4a2410', iron:'#6a7080', ironL:'#9aa0b0', ironD:'#3e4250' };
 function henchFace(p, ox, oy, gear){
   p(ox+1,oy+2,3,4,PK.shade); p(ox+12,oy+2,3,4,PK.shade); p(ox+2,oy+3,1,2,PK.skin); p(ox+13,oy+3,1,2,PK.skin);
   p(ox+2,oy+3,12,11,PK.skin); p(ox+3,oy+2,10,1,PK.skin);
@@ -319,7 +320,7 @@ function pigSet(o, big){
   if (big) for (const k in s) s[k] = Array.isArray(s[k]) ? s[k].map(scale2) : scale2(s[k]);
   return s;
 }
-// henchmen: pink pigs in their own gear, never Pig-Head's blue and lime
+// henchmen: Pig-Head's green, told apart by their own gear rather than their hide
 const GUARD = pigSet({ hench:true, gear:'cap', skin:PK.skin, cuff:PK.leather, weapon:'club', shield:false,
   torso:'#5a2a7a', torsoL:'#7a46a0', torsoD:'#3e1a58', belt:PK.leather, kilt:'#e8dcb8', boot:PK.leather });
 const BRUTE = pigSet({ hench:true, gear:'helmet', skin:PK.skin, cuff:PK.ironD, weapon:'club', shield:false,
