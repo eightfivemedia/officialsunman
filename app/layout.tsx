@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
+import { Analytics } from "@vercel/analytics/next";
 import {
   OG_IMAGE,
   SITE_DESCRIPTION,
@@ -129,6 +130,11 @@ export default function RootLayout({
         <Nav />
         {children}
         <Footer />
+
+        {/* Vercel Web Analytics: page views and visitors, no cookies and no
+            consent banner needed. Google Analytics is still to come — this
+            doesn't conflict with it, both can run side by side. */}
+        <Analytics />
       </body>
     </html>
   );
